@@ -1,6 +1,7 @@
 #/usr/bin/env python
 import subprocess
 import sys, getopt,commands,re
+import urllib
 
 #Set Global variables.
 #application name:
@@ -10,6 +11,7 @@ fdirectory = ''
 version = '10127'
 file = ''
 debug = False
+directory = ""
 
 class RunCmd(object):
     def cmd_run(self, cmd):
@@ -30,14 +32,10 @@ def usage():
     sys.exit(2)
 
 def iswitch():
-    if debug == True :
-        print("entering Method iswitch()")
     setGlobal('debug',True)
 
 def dswitch():
     global url,fdirectory,version,file,debug
-    if debug == True :
-        print("entering Method dswitch() with params :")
     checkdir(fdirectory,version)
 
     #setGlobal("file", )
@@ -58,6 +56,40 @@ def setGlobal(var ,opt):
         file = opt
     elif var == 'debug' :
         debug = True
+
+def getnewdesignerversion(url,dir ,file_name):
+    global directory
+    dircount = len(dir)-1
+    if dir[0] != "/":
+        print("Error: directory not valid")
+    elif dir[dircount] != "/":
+        directory = dir + "/"
+    else:
+        directory = dir
+
+    filename = directory + file_name
+    if debug == True:
+        print("get " + filename)
+
+#download the file
+        #TODO: add error handling.
+    f = open(filename,'wb')
+    f.write(urllib.urlopen(url).read())
+    f.close()
+        
+def getfilename(url):
+    ver = url
+    #print("result :" + ver)
+    for x in range(0,len(url)):
+        char = url[x]
+        if char == "/":
+            x = x+1
+            ver = url[x]
+        else :
+            ver = ver + char
+              
+    ver = ver[1:]
+    return ver
     
 def checkdir(d , v):
     global debug
@@ -69,10 +101,14 @@ def checkdir(d , v):
     
     output = commands.getstatusoutput('ls | grep ' + v + ".zip")
 
-    #if debug == True :
-    print("Output is : " + str(output) + " and file should be " + str(output[1]))
+    if debug == True :
+        print("Output is : " + str(output) + " and file should be " + str(output[1]))
 
-#    if output
+    if output[1] == "" :
+        print("output is null")
+        filename = getfilename(url)
+        getnewdesignerversion(url,fdirectory,filename)
+        
 
     #setGlobal('file',output[1])
     if debug == True :
@@ -110,9 +146,6 @@ def main(argv):
 #no switch added!
         #print('else')
 
-
-    if debug == True :
-        print('***END for***')
 
     #Check File exists
     dswitch()
