@@ -63,14 +63,18 @@ def checkdir(d , v):
     global debug
     if debug == True :
         print("entering Method checkdir() with params :" + str(d) + " - " + str(v))
-    #a = RunCmd()
-    #invchar = [')','(',' ']
+      
     subprocess.call('cd '+ d, shell=True)
     #TODO: need to figure out the subprocess method of this as this is Depricated in python3
+    
     output = commands.getstatusoutput('ls | grep ' + v + ".zip")
-    #if
 
-    setGlobal('file',output[1])
+    #if debug == True :
+    print("Output is : " + output + " and file should be " + str(output[1]))
+
+#    if output
+
+    #setGlobal('file',output[1])
     if debug == True :
         print str(output)
     #for invalidchars in output:
@@ -103,7 +107,7 @@ def main(argv):
             setGlobal('url', arg)
         elif opt in ('-v', '--version='):
             setGlobal('version', arg)
-    #no switch added!
+#no switch added!
         #print('else')
 
 
