@@ -70,7 +70,7 @@ def checkdir(d , v):
     output = commands.getstatusoutput('ls | grep ' + v + ".zip")
 
     #if debug == True :
-    print("Output is : " + output + " and file should be " + str(output[1]))
+    print("Output is : " + str(output) + " and file should be " + str(output[1]))
 
 #    if output
 
